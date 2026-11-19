@@ -1,0 +1,6 @@
+{
+  "name": "LendPlus Web",
+  "description": "Fast, transparent KES loans from KES 10,000 to KES 70,000 with instant M-Pesa disbursement and flexible repayment extensions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
