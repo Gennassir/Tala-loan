@@ -62,7 +62,8 @@ export default function App() {
         }),
       });
 
-      const body = (await response.json()) as {
+      const rawText = await response.text();
+      let body: {
         success?: boolean;
         error?: string;
         data?: {
@@ -74,11 +75,18 @@ export default function App() {
           timeoutSeconds?: number;
           serverVerifiedAt?: string;
         };
-      };
+      } | null = null;
 
-      if (!response.ok || !body.success || !body.data) {
+      try {
+        body = rawText ? JSON.parse(rawText) : null;
+      } catch {
+        body = null;
+      }
+
+      if (!response.ok || !body?.success || !body.data) {
         setGatewayError(
-          body.error || 'Could not initiate M-Pesa STK push. Please check your details and try again.'
+          body?.error ||
+            `Payment server returned HTTP ${response.status}. Ensure the payment API route and gateway environment variables are configured.`
         );
         setApplyModalOpen(true);
         return;

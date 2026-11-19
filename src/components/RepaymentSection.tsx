@@ -58,7 +58,8 @@ export const RepaymentSection: React.FC<RepaymentSectionProps> = ({
         }),
       });
 
-      const body = (await res.json()) as {
+      const rawText = await res.text();
+      let body: {
         success?: boolean;
         error?: string;
         data?: {
@@ -70,10 +71,19 @@ export const RepaymentSection: React.FC<RepaymentSectionProps> = ({
           timeoutSeconds?: number;
           serverVerifiedAt?: string;
         };
-      };
+      } | null = null;
 
-      if (!res.ok || !body.success || !body.data) {
-        setRepayError(body.error || 'Could not send M-Pesa repayment prompt.');
+      try {
+        body = rawText ? JSON.parse(rawText) : null;
+      } catch {
+        body = null;
+      }
+
+      if (!res.ok || !body?.success || !body.data) {
+        setRepayError(
+          body?.error ||
+            `Payment server returned HTTP ${res.status}. Could not send M-Pesa repayment prompt.`
+        );
         return;
       }
 

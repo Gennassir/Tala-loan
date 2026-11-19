@@ -2,7 +2,8 @@ import 'dotenv/config';
 import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import express, { Request, Response } from 'express';
+import express from 'express';
+import type { Request, Response } from 'express';
 import { createServer as createViteServer } from 'vite';
 import { LOAN_PACKAGES } from './src/data/loanPackages.ts';
 
